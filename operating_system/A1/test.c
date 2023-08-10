@@ -8,41 +8,39 @@ will be incorporated into the program. Finally, in the last step, the program
 will be enhanced to respond to the "HUP" and "INT" signals.*/
 #include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
 
-bool evenNumber(const char input[], int length) 
+
+bool isEven(char c)
 {
-	bool loop=true;
-	for (int i = 0; i < length-1; ++i)
-	{
-		if (input[i]%2 ==0)
-		{
-			printf("The first even number is:%c\n", input[i]);
-			break;
-		}
-		if (input[i] >= '0' && input[i] <= '9')//we have to consider for the step 3. otherwise program never stop.
-		{
-			loop =false;
-		}
-	}
-	return loop;
+    return (c >= '0' && c <= '9' && (c - '0') % 2 == 0);
 }
 
 int main(int argc, char const *argv[])
 {
 	char input[10001]; //Assume  the maximum inpur is not over than 10001
-	int length =0;
-	int loop=0;
-	while(loop ==0)
-	{	
-		printf("Enter the number,Please!\n");//let's user input the number
-		fgets(input, sizeof(input), stdin);//
-		while(input[length]!= '\0'){ // we have to know what is the length of the input;
-		length++;
-		}
-		if (evenNumber(input,length)==false)
-		{
-			loop=1;a
-		}
-	}
+	 while (1)
+    {   
+        printf("Enter the number, Please!\n");
+        fgets(input, sizeof(input), stdin);
+        
+        int length = 0;
+        while (input[length] != '\n' && input[length] != '\0')
+        {
+            if (!isdigit(input[length]))
+            {
+                printf("Stopping due to non-digit character.\n");
+                return 0;
+            }
+            
+            if (isEven(input[length]))
+            {
+                printf("The first even number is: %c\n", input[length]);
+                return 0;
+            }
+            
+            length++;
+        }
+    }
 	return 0;
 }
