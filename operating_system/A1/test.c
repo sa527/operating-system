@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 		}
 		if (evenNumber(input,length)==false)
 		{
-			loop=1;
+			loop=1;a
 		}
 	}
 	return 0;
