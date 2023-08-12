@@ -67,7 +67,7 @@ int main(int argk, char *argv[], char *envp[])
 			{
 				wpid = wait(0);
 				printf("%s done \n", v[0]);
-				break;
+				break;;
 			}
 			} /* switch */
 		} /* while */
