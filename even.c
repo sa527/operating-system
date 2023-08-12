@@ -21,13 +21,13 @@ bool isEven(char c)
 // Signal for SIGHUP
 void handleHUP(int signum)
 {
-    printf("Ouch!\n");
+    printf("Ouch!");
 }
 
 // Signal for SIGINT
 void handleINT(int signum)
 {
-    printf("Yeah!\n");
+    printf("Yeah!");
 }
 
 int main(int argc, char const *argv[])
