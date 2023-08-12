@@ -33,32 +33,31 @@ void handleINT(int signum)
 int main(int argc, char const *argv[])
 {
 	char input[10001]; //Assume  the maximum inpur is not over than 10001
-    while (1)
-    {   
-        int a=1;
-        signal(SIGHUP, handleHUP);
-        signal(SIGINT, handleINT);
+      
+    int a=1;
+    signal(SIGHUP, handleHUP);
+    signal(SIGINT, handleINT);
 
-        printf("Enter the number, Please!\n");
-        fgets(input, sizeof(input), stdin);
-        sleep(5);
-        int length = 0;
-        while (input[length] != '\n' && input[length] != '\0')
+    printf("Enter the number, Please!\n");
+    fgets(input, sizeof(input), stdin);
+    sleep(5);
+    int length = 0;
+    while (input[length] != '\n' && input[length] != '\0')
+    {
+        if (!isdigit(input[length]))
         {
-            if (!isdigit(input[length]))
-            {
-                printf("Stopping due to non-digit character.\n");
-                return 0;
-            }
-            
-            if (isEven(input[length])&& a==1)
-            {
-                printf("The first even number is: %c\n", input[length]);
-                a=2;
-            }
-            
-            length++;
+            printf("Stopping due to non-digit character.\n");
+            return 0;
         }
+        
+        if (isEven(input[length])&& a==1)
+        {
+            printf("The first even number is: %c\n", input[length]);
+            a=2;
+        }
+        
+        length++;
     }
+    
 	return 0;
 }
