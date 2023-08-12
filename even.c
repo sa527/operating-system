@@ -7,18 +7,11 @@ In the subsequent step, a delay of 5 seconds using the "sleep(5)" function
 will be incorporated into the program. Finally, in the last step, the program 
 will be enhanced to respond to the "HUP" and "INT" signals.*/
 #include <stdio.h>
-#include <stdbool.h>
-#include <ctype.h>
 #include <unistd.h>
 #include <signal.h>
+#include <stdlib.h>
 
 
-bool isEven(char c)
-{
-    return (c >= '0' && c <= '9' && (c - '0') % 2 == 0);
-}
-
-// Signal for SIGHUP
 void handleHUP(int signum)
 {
     printf("Ouch!");
@@ -32,32 +25,18 @@ void handleINT(int signum)
 
 int main(int argc, char const *argv[])
 {
-	char input[10001]; //Assume  the maximum inpur is not over than 10001
-      
-    int a=1;
     signal(SIGHUP, handleHUP);
     signal(SIGINT, handleINT);
 
-    printf("Enter the number, Please!\n");
-    fgets(input, sizeof(input), stdin);
     sleep(5);
-    int length = 0;
-    while (input[length] != '\n' && input[length] != '\0')
-    {
-        if (!isdigit(input[length]))
+    int length =atoi(argv[1]);;
+    for (int i = 0; i < length*2; ++i)
         {
-            printf("Stopping due to non-digit character.\n");
-            return 0;
-        }
-        
-        if (isEven(input[length])&& a==1)
-        {
-            printf("The first even number is: %c\n", input[length]);
-            a=2;
-        }
-        
-        length++;
-    }
-    
+            if (i%2 ==0)
+            {
+               printf("%i\n",i);
+            }
+            
+        }    
 	return 0;
 }
