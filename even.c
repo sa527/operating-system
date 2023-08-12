@@ -14,29 +14,26 @@ will be enhanced to respond to the "HUP" and "INT" signals.*/
 
 void handleHUP(int signum)
 {
-    printf("Ouch!");
+    printf("Ouch!\n");
+    alarm(0);
 }
 
 // Signal for SIGINT
 void handleINT(int signum)
 {
-    printf("Yeah!");
+    printf("Yeah!\n");
+    alarm(0);
 }
 
 int main(int argc, char const *argv[])
 {
+    int length =atoi(argv[1]);
     signal(SIGHUP, handleHUP);
     signal(SIGINT, handleINT);
-
-    sleep(5);
-    int length =atoi(argv[1]);;
-    for (int i = 0; i < length*2; ++i)
-        {
-            if (i%2 ==0)
-            {
-               printf("%i\n",i);
-            }
-            
+    for (int i = 0; i < length*2; i+=2)
+        {            
+            sleep(5);
+            printf("%i\n",i);
         }    
 	return 0;
 }
