@@ -117,7 +117,7 @@ int main(int argk, char *argv[], char *envp[])
                     if (wpid == -1) {
                         perror("wait");
                     } else {
-                        printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
+                        //printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
                     }
                 }
                 break;
