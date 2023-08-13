@@ -124,9 +124,15 @@ int main(int argk, char *argv[], char *envp[])
                         for (int j = 1; j < backgroundCount; j++) {
                             if (waitpid(-1, NULL, WNOHANG) == wpid) {
                                 printf("[%d]+ Done\t\t\t%s\n", j, background_names[j]);
+
                                 break;
                             }
                         }
+                    }
+                }
+                if (backgroundCount > 1) {
+                    while ((wpid = waitpid(-1, NULL, WNOHANG)) > 0) {
+                        printf("[%d]+ Done\t\t\t%s\n", wpid, v[0]);
                     }
                 }
                 break;
