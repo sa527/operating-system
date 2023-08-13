@@ -34,6 +34,8 @@ fix the minishell so that if the exec system call fails, the child process is co
 #define NV 20 /* max number of command tokens */
 #define NL 100 /* input buffer size */
 char line[NL]; /* command input buffer */
+char *background_names[NV]; /* array to store background process names */
+
 /*
 shell prompt
 */
@@ -52,7 +54,7 @@ int main(int argk, char *argv[], char *envp[])
 	char *v[NV]; /* array of pointers to command line tokens */
 	char *sep = " \t\n";/* command line token separators */
 	int i; /* parse index */
-	int backgroundCount=1;
+	int backgroundCount = 1;
 	/* prompt for and process one command line at a time */
 	while (1) { /* do Forever */
 		prompt();
@@ -109,23 +111,26 @@ int main(int argk, char *argv[], char *envp[])
                 }
 			}
 			default: /* code executed only by parent process */
-			{
-				if (background) {
-                    printf("[%d] %d\n", backgroundCount++, frkRtnVal);
+            {
+                if (background) {
+                    printf("[%d] %d\n", backgroundCount, frkRtnVal);
+                    background_names[backgroundCount] = strdup(v[0]);
+                    backgroundCount++;
                 } else {
                     wpid = wait(0);
                     if (wpid == -1) {
                         perror("wait");
                     } else {
-                        for (int i = 0; i < backgroundCount; ++i)
-                        {
-                        	printf("[%d]+ Done\t\t\t%s\n", i, v[0]);
+                        for (int j = 1; j < backgroundCount; j++) {
+                            if (waitpid(-1, NULL, WNOHANG) == wpid) {
+                                printf("[%d]+ Done\t\t\t%s\n", j, background_names[j]);
+                                break;
+                            }
                         }
-                        //printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
                     }
                 }
                 break;
-			}
+            }
 			} /* switch */
 		} /* while */
 } /* main */
