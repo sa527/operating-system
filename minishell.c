@@ -52,6 +52,7 @@ int main(int argk, char *argv[], char *envp[])
 	char *v[NV]; /* array of pointers to command line tokens */
 	char *sep = " \t\n";/* command line token separators */
 	int i; /* parse index */
+	int backgroundCount=1;
 	/* prompt for and process one command line at a time */
 	while (1) { /* do Forever */
 		prompt();
@@ -110,17 +111,16 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
-					static int bgCounter = 1; // Initialize once and increment for each new background process
-                	printf("[%d] pid\n", bgCounter++);
-				} else {
-					wpid = wait(0);
-					if (wpid == -1) {
-						perror("wait");
-					} else {
-						//printf("[%s] done \n", v[0]);
-					}
-				}
-				break;
+                    printf("[%d] %d started in background\n", backgroundCount++, frkRtnVal);
+                } else {
+                    wpid = wait(0);
+                    if (wpid == -1) {
+                        perror("wait");
+                    } else {
+                        printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
+                    }
+                }
+                break;
 			}
 			} /* switch */
 		} /* while */
