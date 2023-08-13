@@ -6,6 +6,24 @@ skeleton code for linix/unix/minix command line interpreter
 File : minishell.c
 Compiler/System : gcc/linux
 ********************************************************************/
+
+/**************************************************************
+ * Modify that minishell to do the following:
+
+put commands ended by an “&”  into background mode and report when they finish. 
+properly interpret the shell cd command
+include an appropriate perror statement after each and every system call.
+fix the minishell so that if the exec system call fails, the child process is correctly terminated
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * **********************************************************/
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -46,28 +64,54 @@ int main(int argk, char *argv[], char *envp[])
 		}
 		if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
 			continue; /* to prompt */
-		v[0] = strtok(line, sep);
+		v[0] = strtok(line, sep); //
 		for (i = 1; i < NV; i++) {
 			v[i] = strtok(NULL, sep);
 			if (v[i] == NULL)
 				break;
 		}
+
+		int background = 0;
+        if (line[strlen(line) - 2] == '&') {
+            background = 1;
+            line[strlen(line) - 2] = '\0';
+        }
+
+        if (strcmp(v[0], "cd") == 0) {
+            if (v[1] == NULL) {
+                fprintf(stderr, "Usage: cd <directory>\n");
+            } else if (chdir(v[1]) == -1) {
+                perror("chdir");
+            }
+            continue; 
+        }
+
 		/* assert i is number of tokens + 1 */
 		/* fork a child process to exec the command in v[0] */
 		switch (frkRtnVal = fork()) {
 			case -1: /* fork returns error to parent process */
 			{
+				perror("fork");
 				break;
 			}
 			case 0: /* code executed only by child process */
 			{
-				execvp(v[0], v);
+				if (execvp(v[0], v) == -1) {
+                    perror("execvp");
+                    exit(EXIT_FAILURE);
+                }
 			}
 			default: /* code executed only by parent process */
 			{
-				wpid = wait(0);
-				printf("%s done \n", v[0]);
-				break;;
+				if (!background) {
+                    wpid = wait(0);
+                    if (wpid == -1) {
+                        perror("wait");
+                    } else {
+                        printf("%s done \n", v[0]);
+                    }
+                }
+                break;
 			}
 			} /* switch */
 		} /* while */
