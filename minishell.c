@@ -111,7 +111,7 @@ int main(int argk, char *argv[], char *envp[])
 			{
 				if (background) {
 					//static int bgCounter = 1; // Initialize once and increment for each new background process
-                	printf("[%d] pid\n", bgCounter++, frkRtnVal);
+                	printf("[%d] pid\n", frkRtnVal);
 				} else {
 					wpid = wait(0);
 					if (wpid == -1) {
