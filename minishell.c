@@ -103,12 +103,14 @@ int main(int argk, char *argv[], char *envp[])
 			}
 			default: /* code executed only by parent process */
 			{
-				if (!background) {
+				if (background) {
+                    printf("[%s] started in background\n", v[0]);
+                } else {
                     wpid = wait(0);
                     if (wpid == -1) {
                         perror("wait");
                     } else {
-                        printf("%s done \n", v[0]);
+                        printf("[%s] done \n", v[0]);
                     }
                 }
                 break;
