@@ -39,7 +39,7 @@ shell prompt
 */
 void prompt(void)
 {
-	fprintf(stdout, "\n msh> ");
+	//fprintf(stdout, "\n msh> ");
 	fflush(stdout);
 }
 int main(int argk, char *argv[], char *envp[])
@@ -58,8 +58,8 @@ int main(int argk, char *argv[], char *envp[])
 		fgets(line, NL, stdin);
 		fflush(stdin);
 		if (feof(stdin)) { /* non-zero on EOF */
-			fprintf(stderr, "EOF pid %d feof %d ferror %d\n", getpid(),
-			feof(stdin), ferror(stdin));
+			/*fprintf(stderr, "EOF pid %d feof %d ferror %d\n", getpid(),
+			feof(stdin), ferror(stdin));*/
 			exit(0);
 		}
 		if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
@@ -72,10 +72,10 @@ int main(int argk, char *argv[], char *envp[])
 		}
 
 		int background = 0;
-        if (line[strlen(line) - 2] == '&') {
-            background = 1;
-            line[strlen(line) - 2] = '\0';
-        }
+		if (line[strlen(line) - 2] == '&') {
+		    background = 1;
+		    line[strlen(line) - 2] = '\0';
+		}
 
         if (strcmp(v[0], "cd") == 0) {
             if (v[1] == NULL) {
@@ -104,16 +104,16 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
-                    printf("[%s] started in background\n", v[0]);
-                } else {
-                    wpid = wait(0);
-                    if (wpid == -1) {
-                        perror("wait");
-                    } else {
-                        printf("[%s] done \n", v[0]);
-                    }
-                }
-                break;
+					printf("[%s] started in background\n", v[0]);
+				} else {
+					wpid = wait(0);
+					if (wpid == -1) {
+						perror("wait");
+					} else {
+						//printf("[%s] done \n", v[0]);
+					}
+				}
+				break;
 			}
 			} /* switch */
 		} /* while */
