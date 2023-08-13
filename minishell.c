@@ -111,7 +111,7 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
-                    printf("[%d] %d started in background\n", backgroundCount++, frkRtnVal);
+                    printf("[%d] %d\n", backgroundCount++, frkRtnVal);
                 } else {
                     wpid = wait(0);
                     if (wpid == -1) {
