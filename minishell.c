@@ -64,6 +64,17 @@ int main(int argk, char *argv[], char *envp[])
 		}
 		if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
 			continue; /* to prompt */
+		
+
+		int background = 0;
+		
+		//printf("show????:%c",line[strlen(line)-2]);
+		if (line[strlen(line) - 2] == '&') {
+		    
+		    background = 1;
+		    line[strlen(line) - 2] = '\0';
+		}
+
 		v[0] = strtok(line, sep); //
 		for (i = 1; i < NV; i++) {
 			v[i] = strtok(NULL, sep);
@@ -71,12 +82,7 @@ int main(int argk, char *argv[], char *envp[])
 				break;
 		}
 
-		int background = 0;
-		if (line[strlen(line) - 2] == '&') {
-		    background = 1;
-		    line[strlen(line) - 2] = '\0';
-		}
-
+		//printf("show me background:%i",background);
         if (strcmp(v[0], "cd") == 0) {
             if (v[1] == NULL) {
                 fprintf(stderr, "Usage: cd <directory>\n");
@@ -104,6 +110,7 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
+
 					printf("[%s] started in background\n", v[0]);
 				} else {
 					wpid = wait(0);
