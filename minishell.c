@@ -111,15 +111,20 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
-                    printf("[%d] %d\n", backgroundCount++, frkRtnVal);
-                } else {
-                    wpid = wait(0);
-                    if (wpid == -1) {
-                        perror("wait");
-                    } else {
-                        printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
-                    }
-                }
+					printf("[%d] %s\n", backgroundCount++, v[0]);
+				} else {
+					wpid = wait(0);
+					if (wpid == -1) {
+						perror("wait");
+					} else {
+						if (backgroundCount > 1) {
+							printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
+						} else {
+							printf("[%d]+ Done\t\t%s\n", backgroundCount - 1, v[0]);
+						}
+					}
+				}
+
                 break;
 			}
 			} /* switch */
