@@ -117,12 +117,13 @@ int main(int argk, char *argv[], char *envp[])
 					if (wpid == -1) {
 						perror("wait");
 					} else {
-						if (backgroundCount > 1) {
-							printf("[%d]+ Done\t\t\t%s\n", backgroundCount - 1, v[0]);
-						} else {
-							printf("[%d]+ Done\t\t%s\n", backgroundCount - 1, v[0]);
-						}
-					}
+						int count2=1;
+	                    while ((wpid = waitpid(-1, NULL, WNOHANG)) > 0) {
+
+	                        printf("[%d]+ Done\t\t%s\n", count2, v[0]);
+	                        count2++;
+	                    }
+	                }
 				}
 
                 break;
