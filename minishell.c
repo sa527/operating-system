@@ -42,6 +42,7 @@ void prompt(void)
 	//fprintf(stdout, "\n msh> ");
 	fflush(stdout);
 }
+
 int main(int argk, char *argv[], char *envp[])
 /* argk - number of arguments */
 /* argv - argument vector from command line */
@@ -53,6 +54,8 @@ int main(int argk, char *argv[], char *envp[])
 	char *sep = " \t\n";/* command line token separators */
 	int i; /* parse index */
 	int backgroundCount=1;
+    int backgroundDone = 0;
+
 	/* prompt for and process one command line at a time */
 	while (1) { /* do Forever */
 		prompt();
@@ -108,24 +111,25 @@ int main(int argk, char *argv[], char *envp[])
                     exit(EXIT_FAILURE);
                 }
 			}
-			default: /* code executed only by parent process */
-			{
-				if (background) {
-					printf("[%d] %s\n", backgroundCount++, v[0]);
-				} else {
-					wpid = wait(0);
-					if (wpid == -1) {
-						perror("wait");
-					} else {
-	                    if ((wpid = waitpid(frkRtnVal, NULL, 0)) > 0) {
-	                        for (int j = 1; j < backgroundCount; j++) {
-	                            printf("[%d]+ Done\t\t%s\n", j, v[0]);
-	                        }
-	                    }
-	                }
-	            }
+			default:
+            {
+                if (background) {
+                    printf("[%d] %d\n", backgroundCount++, frkRtnVal);
+                }
+                else {
+                    wpid = wait(0);
+                    if (wpid == -1) {
+                        perror("wait");
+                    }
+                    else if (backgroundCount > 1) {
+                        printf("[%d]+  Done\t\t\t%s\n", backgroundCount - 1, v[0]);
+                    }
+                    else {
+                        printf("[%d]+   Done\t\t\t%s\n", backgroundCount - 1, v[0]);
+                    }
+                }
+                }
                 break;
-			}
 			} /* switch */
 		} /* while */
 } /* main */
