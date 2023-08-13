@@ -110,8 +110,8 @@ int main(int argk, char *argv[], char *envp[])
 			default: /* code executed only by parent process */
 			{
 				if (background) {
-
-					printf("[%s] started in background\n", v[0]);
+					static int bgCounter = 1; // Initialize once and increment for each new background process
+                	printf("[%d] %d started in background\n", bgCounter++, frkRtnVal);
 				} else {
 					wpid = wait(0);
 					if (wpid == -1) {
